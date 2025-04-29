@@ -42,29 +42,29 @@ public final class AddressUtil {
    * @return the parsed address
    */
   public static InetSocketAddress parseAddress(String ip) {
-  Preconditions.checkNotNull(ip, "ip");
-  String host;
-  int port = DEFAULT_MINECRAFT_PORT;
+    Preconditions.checkNotNull(ip, "ip");
+    String host;
+    int port = DEFAULT_MINECRAFT_PORT;
 
-  int colonIndex = ip.lastIndexOf(':');
-  if (colonIndex != -1 && colonIndex != ip.length() - 1) {
-    host = ip.substring(0, colonIndex);
-    try {
-      port = Integer.parseInt(ip.substring(colonIndex + 1));
-    } catch (NumberFormatException e) {
-      throw new IllegalStateException("Invalid port in address: " + ip);
+    int colonIndex = ip.lastIndexOf(':');
+    if (colonIndex != -1 && colonIndex != ip.length() - 1) {
+      host = ip.substring(0, colonIndex);
+      try {
+        port = Integer.parseInt(ip.substring(colonIndex + 1));
+      } catch (NumberFormatException e) {
+        throw new IllegalStateException("Invalid port in address: " + ip);
+      }
+    } else {
+      host = ip;
     }
-  } else {
-    host = ip;
-  }
 
-  try {
-    InetAddress ia = InetAddresses.forUriString(host);
-    return new InetSocketAddress(ia, port);
-  } catch (IllegalArgumentException e) {
-    return InetSocketAddress.createUnresolved(host, port);
+    try {
+      InetAddress ia = InetAddresses.forUriString(host);
+      return new InetSocketAddress(ia, port);
+    } catch (IllegalArgumentException e) {
+      return InetSocketAddress.createUnresolved(host, port);
+    }
   }
-}
 
   /**
    * Attempts to parse an IP address of the form {@code 127.0.0.1:25565}. The returned
@@ -73,20 +73,23 @@ public final class AddressUtil {
    * @param ip the IP to parse
    * @return the parsed address
    */
-public static InetSocketAddress parseAndResolveAddress(String ip) {
-  Preconditions.checkNotNull(ip, "ip");
-  String host;
-  int port = DEFAULT_MINECRAFT_PORT;
+  public static InetSocketAddress parseAndResolveAddress(String ip) {
+    Preconditions.checkNotNull(ip, "ip");
+    String host;
+    int port = DEFAULT_MINECRAFT_PORT;
 
-  int colonIndex = ip.lastIndexOf(':');
-  if (colonIndex != -1 && colonIndex != ip.length() - 1) {
-    host = ip.substring(0, colonIndex);
-    try {
-      port = Integer.parseInt(ip.substring(colonIndex + 1));
-    } catch (NumberFormatException e) {
-      throw new IllegalStateException("Invalid port in address: " + ip);
+    int colonIndex = ip.lastIndexOf(':');
+    if (colonIndex != -1 && colonIndex != ip.length() - 1) {
+      host = ip.substring(0, colonIndex);
+      try {
+        port = Integer.parseInt(ip.substring(colonIndex + 1));
+      } catch (NumberFormatException e) {
+        throw new IllegalStateException("Invalid port in address: " + ip);
+      }
+    } else {
+      host = ip;
     }
-  } else {
-    host = ip;
+
+    return new InetSocketAddress(host, port);
   }
 }
